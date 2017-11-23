@@ -216,9 +216,11 @@ own faces for the `header-line', or for parts of the
               (?s "Squash"            "--squash"))
   :options  '((?s "Strategy" "--strategy="))
   :actions  '((?m "Merge"                  magit-merge)
+              (?a "Absorb"                 magit-merge-absorb)
               (?e "Merge and edit message" magit-merge-editmsg)
-              (?p "Preview merge"          magit-merge-preview)
-              (?n "Merge but don't commit" magit-merge-nocommit))
+              (?i "Merge into"             magit-merge-into)
+              (?n "Merge but don't commit" magit-merge-nocommit)
+              (?p "Preview merge"          magit-merge-preview))
   :sequence-actions   '((?m "Commit merge" magit-commit)
                         (?a "Abort merge"  magit-merge-abort))
   :sequence-predicate 'magit-merge-state
@@ -266,6 +268,26 @@ inspect the merge and change the commit message.
   (magit-merge-assert)
   (cl-pushnew "--no-ff" args :test #'equal)
   (magit-run-git-async "merge" "--no-commit" args rev))
+
+;;;###autoload
+(defun magit-merge-absorb (branch)
+  "Merge BRANCH into the current branch and remove the former."
+  (interactive (list (magit-read-local-branch "Absorb branch")))
+  )
+
+;;;###autoload
+(defun magit-merge-into (branch)
+  "Merge the current branch into BRANCH and remove the former."
+  (interactive (list (magit-read-branch "Merge `%s' into")))
+  (let ((current  (magit-get-current-branch))
+        (remote   (magit-get-upstream-remote))
+        (upstream (magit-get-upstream-branch)))
+    (unless (zerop (magit-call-git "push" remote "-f" current))
+      (error "Failed to push `%s'" current))
+    (magit-call-git "checkout" branch)
+    (magit-call-git "merge" current)
+    (magit-call-git "branch" "-d" current)
+    (magit-call-git "push" remote (concat ":" upstream))))
 
 ;;;###autoload
 (defun magit-merge-preview (rev)

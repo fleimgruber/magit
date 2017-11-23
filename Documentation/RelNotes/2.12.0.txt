@@ -276,6 +276,8 @@ Changes since v2.11.0
 * Added commands `magit-cherry-harvest', `magit-cherry-move'
   `magit-cherry-spinoff'.  #3134
 
+* Added commands `magit-merge-absorb'and  `magit-merge-into'.  #3134
+
 Fixes since v2.11.0
 -------------------
 
