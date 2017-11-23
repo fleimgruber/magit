@@ -126,13 +126,17 @@ This discards all changes made since the sequence started."
               (?F "Attempt fast-forward"               "--ff"))
   :options  '((?s "Strategy"                        "--strategy=")
               (?m "Replay merge relative to parent" "--mainline="))
-  :actions  '((?A "Cherry Pick"  magit-cherry-pick)
-              (?a "Cherry Apply" magit-cherry-apply))
+  :actions  '((?h "Harvest" magit-cherry-harvest)
+              (?d "Donate"  magit-cherry-donate)
+              (?A "Pick"    magit-cherry-pick)
+              (?s "Spinoff" magit-cherry-spinoff)
+              (?a "Apply"   magit-cherry-apply))
   :sequence-actions '((?A "Continue" magit-sequencer-continue)
                       (?s "Skip"     magit-sequencer-skip)
                       (?a "Abort"    magit-sequencer-abort))
   :sequence-predicate 'magit-sequencer-in-progress-p
-  :default-arguments '("--ff"))
+  :default-arguments '("--ff")
+  :max-action-columns 2)
 
 (defun magit-cherry-pick-read-args (prompt)
   (list (or (nreverse (magit-region-values 'commit))
@@ -156,6 +160,24 @@ the region selects multiple commits, then apply all of them,
 without prompting."
   (interactive (magit-cherry-pick-read-args "Apply changes from commit"))
   (magit--cherry-pick commits (cons "--no-commit" (remove "--ff" args))))
+
+;;;###autoload
+(defun magit-cherry-harvest (commits branch)
+  "Move COMMITS from another BRANCH onto the current branch."
+  (interactive)
+  )
+
+;;;###autoload
+(defun magit-cherry-move (commits branch)
+  "Move COMMITS from the current branch onto another existing BRANCH."
+  (interactive)
+  )
+
+;;;###autoload
+(defun magit-cherry-spinoff (commits branch starting-point)
+  "Move COMMITS from the current branch onto another new BRANCH."
+  (interactive)
+  )
 
 (defun magit--cherry-pick (commits args &optional revert)
   (let ((command (if revert "revert" "cherry-pick")))
