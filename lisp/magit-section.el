@@ -585,7 +585,7 @@ precise."
   ;; this function was changed.
   (and section
        (magit-section-match-1 condition
-                              (if (magit-section-p section)
+                              (if (cl-typep section 'magit-section)
                                   (mapcar #'car (magit-section-ident section))
                                 section))))
 
@@ -704,17 +704,21 @@ anything this time around.
                    (&or [("eval" symbolp) &optional form form]
                         [symbolp &optional form form])
                    body)))
-  (let ((s (if (symbolp (car args))
+  (let ((tp (cl-gensym "type"))
+        (s (if (symbolp (car args))
                (pop args)
              (cl-gensym "section"))))
-    `(let* ((,s (magit-section ""
-                 :type ,(let ((type (nth 0 (car args))))
-                          (if (eq (car-safe type) 'eval)
-                              (cadr type)
-                            `',type))
-                 :value ,(nth 1 (car args))
-                 :start (point-marker)
-                 :parent magit-insert-section--parent)))
+    `(let* ((,tp ,(let ((type (nth 0 (car args))))
+                    (if (eq (car-safe type) 'eval)
+                        (cadr type)
+                      `',type)))
+            (,s (funcall (pcase ,tp
+                           (_ 'magit-section))
+                         ""
+                         :type ,tp
+                         :value ,(nth 1 (car args))
+                         :start (point-marker)
+                         :parent magit-insert-section--parent)))
        (setf (magit-section-hidden ,s)
              (-if-let (value (run-hook-with-args-until-success
                               'magit-section-set-visibility-hook ,s))
