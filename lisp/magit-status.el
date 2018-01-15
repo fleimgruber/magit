@@ -91,12 +91,6 @@ all."
   :group 'magit-status
   :type 'hook)
 
-(defcustom magit-status-expand-stashes t
-  "Whether the list of stashes is expanded initially."
-  :package-version '(magit . "2.3.0")
-  :group 'magit-status
-  :type 'boolean)
-
 (defcustom magit-status-show-hashes-in-headers nil
   "Whether headers in the status buffer show hashes.
 The functions which respect this option are

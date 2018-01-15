@@ -135,7 +135,13 @@ use `magit-pre-refresh-hook', `magit-post-refresh-hook',
   'magit-insert-unpulled-from-upstream "Magit 2.12.0")
 
 (make-obsolete-variable 'magit-no-confirm-default
-                        'magit-dwim-selection "Magit 2.12.0")
+                        'magit-dwim-selection
+                        "Magit 2.12.0")
+
+(defvar magit-status-expand-stashes nil "Obsolete and ignored.")
+(make-obsolete-variable 'magit-status-expand-stashes
+                        'magit-section-initial-visibility-alist
+                        "Magit 2.12.0")
 
 (provide 'magit-obsolete)
 ;;; magit-obsolete.el ends here

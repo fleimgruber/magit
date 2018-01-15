@@ -1046,6 +1046,10 @@ then the previous visibility is preserved. The initial visibility of
 certain sections can also be overwritten using the hook
 ~magit-section-set-visibility-hook~.
 
+- User Option: magit-section-initial-visibility-alist
+
+  TODO
+
 - User Option: magit-section-cache-visibility-types
 
   This option controls for which sections the previous visibility

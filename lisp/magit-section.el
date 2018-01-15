@@ -116,6 +116,14 @@ hardcoded section specific default (see `magit-insert-section')."
   :group 'magit-section
   :type '(repeat symbol))
 
+(defcustom magit-section-initial-visibility-alist nil
+  "Alist controlling with sections are expanded by default."
+  :package-version '(magit . "2.12.0")
+  :group 'magit-section
+  :type '(alist :key-type (symbol :tag "Type")
+                :value-type (choice (const hide)
+                                    (const show))))
+
 (defface magit-section-highlight
   '((((class color) (background light)) :background "grey95")
     (((class color) (background  dark)) :background "grey20"))
